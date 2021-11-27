@@ -3,22 +3,25 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
-</head>
-<body>
+	
 	<script type="module"
 	src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js">
 	</script>
-		
+	
 	<script 
 	nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js">
 	</script>
-		
-	
-	<model-viewer 
-	src=“rotatedLV_scaled.glb"
-        alt="Left-Ventricle"
-	ar
-	iso-src=“rotatedLV_scaled.usdz">
+</head>
+<body>				
+	<model-viewer
+  	src="rotatedLV_scaled.glb"
+  	ios-src="rotatedLV_scaled.usdz"
+  	ar
+  	ar-modes="scene-viewer quick-look"
+  	camera-controls
+  	auto-rotate
+  	poster="./images/baloon.png"
+	>
 	</model-viewer>
 </body>
 </html>
