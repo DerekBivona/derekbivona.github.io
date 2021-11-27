@@ -12,10 +12,21 @@
 	nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js">
 	</script>
 </head>
-<body>				
+<body>		
+	<h1>Model 1</h1>
 	<model-viewer
   	src="rotatedLV_scaled.glb"
   	ios-src="rotatedLV_scaled.usdz"
+  	ar
+  	ar-modes="scene-viewer quick-look"
+  	camera-controls
+  	auto-rotate
+	>
+	</model-viewer>
+	<h1>Model 2</h1>
+	<model-viewer
+  	src="rotatedLV.glb"
+  	ios-src="rotatedLV.usdz"
   	ar
   	ar-modes="scene-viewer quick-look"
   	camera-controls
