@@ -15,31 +15,58 @@
 <body>
 <div class="grid-container">
 	<model-viewer class="a"
-		src="rotatedLV_scaled.glb"
-		ios-src="rotatedLV_scaled.usdz"
+		src="HealthyLV.glb"
+		ios-src="HealthyLV.usdz"
 		ar
 		ar-modes="scene-viewer quick-look"
 		camera-controls
 		auto-rotate>
-		<div id="annotation">Model 1</div>
+		<div id="annotation">Healthy LV</div>
 	</model-viewer>
 	<model-viewer class="b"
-		src="rotatedLV.glb"
-		ios-src="rotatedLV.usdz"
+		src="Isotropic2wk.glb"
+		ios-src="Isotropic2wk.usdz"
 		ar
 		ar-modes="scene-viewer quick-look"
 		camera-controls
 		auto-rotate>
-		<div id="annotation">Model 69</div>
+		<div id="annotation">Candidate Model 1: Isotropic Volume Loss (2 Weeks)</div>
 	</model-viewer>
-		<model-viewer class="c"
-		src="rotatedLV.glb"
-		ios-src="rotatedLV.usdz"
+	<model-viewer class="c"
+		src="Anisotropic2wk.glb"
+		ios-src="Anisotropic2wk.usdz"
 		ar
 		ar-modes="scene-viewer quick-look"
 		camera-controls
 		auto-rotate>
-		<div id="annotation">Model SHEEESH</div>
+		<div id="annotation">Candidate Model 2: Anisotropic Volume Loss (2 Weeks)</div>
+	</model-viewer>
+	<model-viewer class="d"
+		src="RefUp2wk.glb"
+		ios-src="RefUp2wk.usdz"
+		ar
+		ar-modes="scene-viewer quick-look"
+		camera-controls
+		auto-rotate>
+		<div id="annotation">Candidate Model 3: Reference Configuration Update + Isotropic Volume Loss (2 Weeks)</div>
+	</model-viewer>
+	<model-viewer class="e"
+		src="VO8wk.glb"
+		ios-src="VO8wk.usdz"
+		ar
+		ar-modes="scene-viewer quick-look"
+		camera-controls
+		auto-rotate>
+		<div id="annotation">LV Grown Following 8-Weeks of Volume Overload (Sheesh!)</div>
+	</model-viewer>
+	<model-viewer class="f"
+		src="CompModel.glb"
+		ios-src="CompModel.usdz"
+		ar
+		ar-modes="scene-viewer quick-look"
+		camera-controls
+		auto-rotate>
+		<div id="annotation">The Comprehensive Model</div>
 	</model-viewer>
 </div>
 </body>
