@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	
+	<script type="module"
+	src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js">
+	</script>
+	
+	<script 
+	nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js">
+	</script>
+</head>
+<body>
+<div class="grid-container">
+	<model-viewer class="a"
+		src="HealthyLV.glb"
+		ios-src="HealthyLV.usdz"
+		ar
+		ar-modes="scene-viewer quick-look"
+		camera-controls
+		auto-rotate>
+		<div id="annotation">Healthy LV</div>
+	</model-viewer>
+	<model-viewer class="b"
+		src="Isotropic2wk.glb"
+		ios-src="Isotropic2wk.usdz"
+		ar
+		ar-modes="scene-viewer quick-look"
+		camera-controls
+		auto-rotate>
+		<div id="annotation">Model 1: Isotropic Volume Loss (2 Weeks)</div>
+	</model-viewer>
+	<model-viewer class="c"
+		src="Anisotropic2wk.glb"
+		ios-src="Anisotropic2wk.usdz"
+		ar
+		ar-modes="scene-viewer quick-look"
+		camera-controls
+		auto-rotate>
+		<div id="annotation">Model 2: Anisotropic Volume Loss (2 Weeks)</div>
+	</model-viewer>
+	<model-viewer class="d"
+		src="RefUp2wk.glb"
+		ios-src="RefUp2wk.usdz"
+		ar
+		ar-modes="scene-viewer quick-look"
+		camera-controls
+		auto-rotate>
+		<div id="annotation">Model 3: Ref. Con. Update + Iso. Vol. Loss (2 Weeks)</div>
+	</model-viewer>
+	<model-viewer class="e"
+		src="VO8wk.glb"
+		ios-src="VO8wk.usdz"
+		ar
+		ar-modes="scene-viewer quick-look"
+		camera-controls
+		auto-rotate>
+		<div id="annotation">8-Weeks of Volume Overload (Sheesh!)</div>
+	</model-viewer>
+	<model-viewer class="f"
+		src="CompModel.glb"
+		ios-src="CompModel.usdz"
+		ar
+		ar-modes="scene-viewer quick-look"
+		camera-controls
+		auto-rotate>
+		<div id="annotation">The Comprehensive Model</div>
+	</model-viewer>
+</div>
+</body>
+</html>
