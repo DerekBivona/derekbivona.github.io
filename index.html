@@ -4,172 +4,209 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Notes - Apple Notes Inspired</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { margin: 0; padding: 0; overflow: hidden; }
+    body { margin: 0; padding: 0; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
     #root { height: 100vh; }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
   <div id="root"></div>
 
-  <script type="text/babel">
-    const { useState } = React;
-    const { ChevronLeft, Plus, Search } = lucide;
+  <script>
+    const notes = [
+      { 
+        id: 'about-me', 
+        title: 'about me', 
+        emoji: '👋', 
+        content: '# About Me\n\nHi! I\'m recreating Apple\'s Notes app as a personal website.\n\n## What I Do\n\nI build interesting web experiences inspired by Apple\'s design language.\n\n## Current Projects\n\n- **Notes Website**: An Apple Notes-inspired personal site\n- **Messages**: An iMessage-inspired interface\n- **Other Experiments**: Various UI/UX projects\n\n## Tech Stack\n\n- Next.js 14 with App Router\n- TypeScript for type safety\n- Supabase for backend\n- Tailwind CSS for styling\n\n---\n\n*This is a recreation of the design - the original uses server-side rendering and a database backend.*' 
+      },
+      { 
+        id: 'principles', 
+        title: 'principles', 
+        emoji: '💭', 
+        content: '# Principles\n\n## Design Philosophy\n\n1. **Simplicity First**: Clean, minimal interfaces\n2. **Attention to Detail**: Small touches matter\n3. **User-Focused**: Build for real people\n4. **Iteration**: Keep improving\n\n## Working Style\n\n- Move fast, break things (then fix them)\n- Ship early, iterate often\n- Learn in public' 
+      },
+      { 
+        id: 'reading-list', 
+        title: 'reading list', 
+        emoji: '📚', 
+        content: '# Reading List\n\n## Currently Reading\n\n- The Design of Everyday Things\n- Atomic Habits\n- Deep Work\n\n## Want to Read\n\n- Thinking, Fast and Slow\n- The Innovators\n- Sprint\n\n## Finished\n\n- Zero to One\n- The Lean Startup\n- Don\'t Make Me Think' 
+      },
+      { 
+        id: 'bookmarks', 
+        title: 'bookmarks', 
+        emoji: '🔖', 
+        content: '# Bookmarks\n\n## Design Resources\n\n- [Apple Design Resources](https://developer.apple.com/design/resources/)\n- [Figma Community](https://figma.com/community)\n- [Dribbble](https://dribbble.com)\n\n## Development\n\n- [Next.js Docs](https://nextjs.org/docs)\n- [Tailwind CSS](https://tailwindcss.com)\n- [MDN Web Docs](https://developer.mozilla.org)\n\n## Inspiration\n\n- [awwwards](https://awwwards.com)\n- [SiteInspire](https://siteinspire.com)' 
+      },
+      { 
+        id: 'groceries', 
+        title: 'groceries', 
+        emoji: '🛒', 
+        content: '# Groceries\n\n## This Week\n\n- [ ] Milk\n- [ ] Eggs\n- [ ] Bread\n- [ ] Coffee\n- [x] Apples\n- [x] Bananas\n- [ ] Spinach\n- [ ] Chicken\n\n## Staples\n\n- Rice\n- Pasta\n- Olive oil\n- Salt & pepper' 
+      }
+    ];
 
-    const NotesWebsite = () => {
-      const [selectedNote, setSelectedNote] = useState('about-me');
-      const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    let selectedNote = 'about-me';
+    let isSidebarOpen = true;
 
-      const notes = [
-        { id: 'about-me', title: 'about me', emoji: '👋', content: '# About Me\n\nHi! I\'m recreating Apple\'s Notes app as a personal website.\n\n## What I Do\n\nI build interesting web experiences inspired by Apple\'s design language.\n\n## Current Projects\n\n- **Notes Website**: An Apple Notes-inspired personal site\n- **Messages**: An iMessage-inspired interface\n- **Other Experiments**: Various UI/UX projects\n\n## Tech Stack\n\n- Next.js 14 with App Router\n- TypeScript for type safety\n- Supabase for backend\n- Tailwind CSS for styling\n\n---\n\n*This is a recreation of the design - the original uses server-side rendering and a database backend.*' },
-        { id: 'principles', title: 'principles', emoji: '💭', content: '# Principles\n\n## Design Philosophy\n\n1. **Simplicity First**: Clean, minimal interfaces\n2. **Attention to Detail**: Small touches matter\n3. **User-Focused**: Build for real people\n4. **Iteration**: Keep improving\n\n## Working Style\n\n- Move fast, break things (then fix them)\n- Ship early, iterate often\n- Learn in public' },
-        { id: 'reading-list', title: 'reading list', emoji: '📚', content: '# Reading List\n\n## Currently Reading\n\n- The Design of Everyday Things\n- Atomic Habits\n- Deep Work\n\n## Want to Read\n\n- Thinking, Fast and Slow\n- The Innovators\n- Sprint\n\n## Finished\n\n- Zero to One\n- The Lean Startup\n- Don\'t Make Me Think' },
-        { id: 'bookmarks', title: 'bookmarks', emoji: '🔖', content: '# Bookmarks\n\n## Design Resources\n\n- [Apple Design Resources](https://developer.apple.com/design/resources/)\n- [Figma Community](https://figma.com/community)\n- [Dribbble](https://dribbble.com)\n\n## Development\n\n- [Next.js Docs](https://nextjs.org/docs)\n- [Tailwind CSS](https://tailwindcss.com)\n- [MDN Web Docs](https://developer.mozilla.org)\n\n## Inspiration\n\n- [awwwards](https://awwwards.com)\n- [SiteInspire](https://siteinspire.com)' },
-        { id: 'groceries', title: 'groceries', emoji: '🛒', content: '# Groceries\n\n## This Week\n\n- [ ] Milk\n- [ ] Eggs\n- [ ] Bread\n- [ ] Coffee\n- [x] Apples\n- [x] Bananas\n- [ ] Spinach\n- [ ] Chicken\n\n## Staples\n\n- Rice\n- Pasta\n- Olive oil\n- Salt & pepper' }
-      ];
-
-      const currentNote = notes.find(n => n.id === selectedNote);
-
-      const renderContent = (content) => {
-        return content.split('\n').map((line, i) => {
-          if (line.startsWith('# ')) {
-            return <h1 key={i} className="text-3xl font-bold mb-4 mt-8 first:mt-0">{line.slice(2)}</h1>;
-          } else if (line.startsWith('## ')) {
-            return <h2 key={i} className="text-2xl font-semibold mb-3 mt-6">{line.slice(3)}</h2>;
-          } else if (line.startsWith('- [x] ')) {
-            return (
-              <div key={i} className="flex items-center gap-2 mb-2">
-                <input type="checkbox" checked readOnly className="w-4 h-4" />
-                <span className="line-through text-zinc-400">{line.slice(6)}</span>
-              </div>
-            );
-          } else if (line.startsWith('- [ ] ')) {
-            return (
-              <div key={i} className="flex items-center gap-2 mb-2">
-                <input type="checkbox" readOnly className="w-4 h-4" />
-                <span>{line.slice(6)}</span>
-              </div>
-            );
-          } else if (line.startsWith('- **')) {
-            const match = line.match(/- \*\*(.+?)\*\*: (.+)/);
-            if (match) {
-              return (
-                <li key={i} className="mb-2 ml-4">
-                  <strong>{match[1]}</strong>: {match[2]}
-                </li>
-              );
-            }
-            return <li key={i} className="mb-2 ml-4">{line.slice(2)}</li>;
-          } else if (line.startsWith('- ') || line.startsWith('* ')) {
-            return <li key={i} className="mb-2 ml-4">{line.slice(2)}</li>;
-          } else if (line.match(/^\d+\. /)) {
-            return <li key={i} className="mb-2 ml-4">{line.replace(/^\d+\. /, '')}</li>;
-          } else if (line.startsWith('---')) {
-            return <hr key={i} className="my-6 border-zinc-700" />;
-          } else if (line.startsWith('*') && line.endsWith('*')) {
-            return <p key={i} className="italic text-zinc-400 text-sm mb-4">{line.slice(1, -1)}</p>;
-          } else if (line.match(/\[.+?\]\(.+?\)/)) {
-            const match = line.match(/\[(.+?)\]\((.+?)\)/);
-            if (match) {
-              return (
-                <p key={i} className="mb-4">
-                  - <a href={match[2]} target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:text-amber-300 underline">{match[1]}</a>
-                </p>
-              );
-            }
-            return <p key={i} className="mb-4">{line}</p>;
-          } else if (line.trim()) {
-            return <p key={i} className="mb-4">{line}</p>;
+    function renderContent(content) {
+      const lines = content.split('\n');
+      let html = '';
+      
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        
+        if (line.startsWith('# ')) {
+          html += `<h1 class="text-3xl font-bold mb-4 mt-8 first:mt-0">${line.slice(2)}</h1>`;
+        } else if (line.startsWith('## ')) {
+          html += `<h2 class="text-2xl font-semibold mb-3 mt-6">${line.slice(3)}</h2>`;
+        } else if (line.startsWith('- [x] ')) {
+          html += `<div class="flex items-center gap-2 mb-2">
+            <input type="checkbox" checked disabled class="w-4 h-4">
+            <span class="line-through text-zinc-400">${line.slice(6)}</span>
+          </div>`;
+        } else if (line.startsWith('- [ ] ')) {
+          html += `<div class="flex items-center gap-2 mb-2">
+            <input type="checkbox" disabled class="w-4 h-4">
+            <span>${line.slice(6)}</span>
+          </div>`;
+        } else if (line.startsWith('- **')) {
+          const match = line.match(/- \*\*(.+?)\*\*: (.+)/);
+          if (match) {
+            html += `<li class="mb-2 ml-4"><strong>${match[1]}</strong>: ${match[2]}</li>`;
           } else {
-            return <div key={i} className="h-2" />;
+            html += `<li class="mb-2 ml-4">${line.slice(2)}</li>`;
           }
-        });
-      };
+        } else if (line.startsWith('- ') || line.startsWith('* ')) {
+          html += `<li class="mb-2 ml-4">${line.slice(2)}</li>`;
+        } else if (line.match(/^\d+\. /)) {
+          html += `<li class="mb-2 ml-4">${line.replace(/^\d+\. /, '')}</li>`;
+        } else if (line.startsWith('---')) {
+          html += `<hr class="my-6 border-zinc-700">`;
+        } else if (line.startsWith('*') && line.endsWith('*') && !line.includes('**')) {
+          html += `<p class="italic text-zinc-400 text-sm mb-4">${line.slice(1, -1)}</p>`;
+        } else if (line.match(/\[.+?\]\(.+?\)/)) {
+          const match = line.match(/\[(.+?)\]\((.+?)\)/);
+          if (match) {
+            html += `<p class="mb-4">- <a href="${match[2]}" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 underline">${match[1]}</a></p>`;
+          } else {
+            html += `<p class="mb-4">${line}</p>`;
+          }
+        } else if (line.trim()) {
+          html += `<p class="mb-4">${line}</p>`;
+        } else {
+          html += `<div class="h-2"></div>`;
+        }
+      }
+      
+      return html;
+    }
 
-      return (
-        <div className="flex h-screen bg-zinc-900 text-white font-sans overflow-hidden">
-          {/* Sidebar */}
-          <div className={`${isSidebarOpen ? 'w-64' : 'w-0'} transition-all duration-300 bg-zinc-800 border-r border-zinc-700 flex flex-col overflow-hidden`}>
-            <div className="p-4 border-b border-zinc-700">
-              <h1 className="text-xl font-semibold text-amber-400">notes</h1>
+    function render() {
+      const currentNote = notes.find(n => n.id === selectedNote);
+      const preview = currentNote.content.split('\n').find(line => line && !line.startsWith('#'));
+      
+      document.getElementById('root').innerHTML = `
+        <div class="flex h-screen bg-zinc-900 text-white overflow-hidden">
+          <!-- Sidebar -->
+          <div class="${isSidebarOpen ? 'w-64' : 'w-0'} transition-all duration-300 bg-zinc-800 border-r border-zinc-700 flex flex-col overflow-hidden">
+            <div class="p-4 border-b border-zinc-700">
+              <h1 class="text-xl font-semibold text-amber-400">notes</h1>
             </div>
             
-            <div className="p-3 border-b border-zinc-700">
-              <div className="flex items-center bg-zinc-700 rounded-lg px-3 py-2">
-                <Search size={16} className="text-zinc-400" />
+            <div class="p-3 border-b border-zinc-700">
+              <div class="flex items-center bg-zinc-700 rounded-lg px-3 py-2">
+                <i data-lucide="search" class="w-4 h-4 text-zinc-400"></i>
                 <input 
                   type="text" 
                   placeholder="Search" 
-                  className="ml-2 bg-transparent text-sm outline-none flex-1 text-white placeholder-zinc-400"
-                />
+                  class="ml-2 bg-transparent text-sm outline-none flex-1 text-white placeholder-zinc-400"
+                >
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto">
-              {notes.map(note => (
-                <div
-                  key={note.id}
-                  onClick={() => setSelectedNote(note.id)}
-                  className={`px-4 py-3 cursor-pointer border-b border-zinc-700 hover:bg-zinc-700 transition-colors ${
-                    selectedNote === note.id ? 'bg-zinc-700' : ''
-                  }`}
-                >
-                  <div className="flex items-start gap-2">
-                    <span className="text-lg">{note.emoji}</span>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-medium truncate">{note.title}</h3>
-                      <p className="text-xs text-zinc-400 mt-1 line-clamp-2">
-                        {note.content.split('\n').find(line => line && !line.startsWith('#'))?.substring(0, 60)}...
-                      </p>
+            <div class="flex-1 overflow-y-auto">
+              ${notes.map(note => {
+                const notePreview = note.content.split('\n').find(line => line && !line.startsWith('#'));
+                return `
+                  <div
+                    onclick="selectNote('${note.id}')"
+                    class="px-4 py-3 cursor-pointer border-b border-zinc-700 hover:bg-zinc-700 transition-colors ${selectedNote === note.id ? 'bg-zinc-700' : ''}"
+                  >
+                    <div class="flex items-start gap-2">
+                      <span class="text-lg">${note.emoji}</span>
+                      <div class="flex-1 min-w-0">
+                        <h3 class="text-sm font-medium truncate">${note.title}</h3>
+                        <p class="text-xs text-zinc-400 mt-1 line-clamp-2">
+                          ${notePreview ? notePreview.substring(0, 60) + '...' : ''}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                `;
+              }).join('')}
             </div>
 
-            <div className="p-3 border-t border-zinc-700">
-              <button className="flex items-center gap-2 text-amber-400 text-sm hover:text-amber-300 transition-colors">
-                <Plus size={16} />
+            <div class="p-3 border-t border-zinc-700">
+              <button class="flex items-center gap-2 text-amber-400 text-sm hover:text-amber-300 transition-colors">
+                <i data-lucide="plus" class="w-4 h-4"></i>
                 New Note
               </button>
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Header */}
-            <div className="h-14 border-b border-zinc-700 flex items-center px-4 gap-3">
+          <!-- Main Content -->
+          <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="h-14 border-b border-zinc-700 flex items-center px-4 gap-3">
               <button 
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="text-zinc-400 hover:text-white transition-colors"
+                onclick="toggleSidebar()"
+                class="text-zinc-400 hover:text-white transition-colors"
               >
-                <ChevronLeft size={20} className={`transition-transform ${isSidebarOpen ? '' : 'rotate-180'}`} />
+                <i data-lucide="chevron-left" class="w-5 h-5 transition-transform ${isSidebarOpen ? '' : 'rotate-180'}"></i>
               </button>
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">{currentNote?.emoji}</span>
-                <h2 className="text-lg font-medium">{currentNote?.title}</h2>
+              <div class="flex items-center gap-2">
+                <span class="text-2xl">${currentNote.emoji}</span>
+                <h2 class="text-lg font-medium">${currentNote.title}</h2>
               </div>
             </div>
 
-            {/* Content Area */}
-            <div className="flex-1 overflow-y-auto p-8">
-              <div className="max-w-3xl mx-auto">
-                <div className="prose prose-invert prose-lg max-w-none">
-                  {renderContent(currentNote?.content || '')}
+            <!-- Content Area -->
+            <div class="flex-1 overflow-y-auto p-8">
+              <div class="max-w-3xl mx-auto">
+                <div class="prose prose-invert prose-lg max-w-none">
+                  ${renderContent(currentNote.content)}
                 </div>
               </div>
             </div>
           </div>
         </div>
-      );
-    };
+      `;
+      
+      // Initialize Lucide icons
+      lucide.createIcons();
+    }
 
-    ReactDOM.render(<NotesWebsite />, document.getElementById('root'));
+    function selectNote(noteId) {
+      selectedNote = noteId;
+      render();
+    }
+
+    function toggleSidebar() {
+      isSidebarOpen = !isSidebarOpen;
+      render();
+    }
+
+    // Initial render
+    render();
   </script>
 </body>
 </html>
