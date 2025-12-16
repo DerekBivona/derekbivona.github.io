@@ -177,7 +177,8 @@ Here are some useful tools I developed:
     // ============================================
     
     let selectedNote = config.defaultNote;
-    let isSidebarOpen = window.innerWidth >= 768; // Auto-close on mobile
+    let isSidebarOpen = true; // Always start with sidebar visible
+    let isMobile = window.innerWidth < 768;
 
     function renderContent(content) {
       const lines = content.split('\n');
@@ -236,11 +237,12 @@ Here are some useful tools I developed:
     function render() {
       const currentNote = notes.find(n => n.id === selectedNote);
       const preview = currentNote.content.split('\n').find(line => line && !line.startsWith('#'));
+      isMobile = window.innerWidth < 768;
       
       document.getElementById('root').innerHTML = `
         <div class="flex h-screen bg-zinc-900 text-white overflow-hidden">
           <!-- Sidebar -->
-          <div class="${isSidebarOpen ? 'w-64 md:w-64' : 'w-0'} ${isSidebarOpen ? 'fixed md:relative' : ''} ${isSidebarOpen ? 'z-50' : ''} h-full transition-all duration-300 bg-zinc-800 border-r border-zinc-700 flex flex-col overflow-hidden">
+          <div class="${isMobile ? (isSidebarOpen ? 'w-full' : 'hidden') : (isSidebarOpen ? 'w-64' : 'w-0')} transition-all duration-300 bg-zinc-800 border-r border-zinc-700 flex flex-col overflow-hidden">
             <div class="p-4 border-b border-zinc-700">
               <h1 class="text-xl font-semibold text-${config.sidebarColor}-400">${config.sidebarTitle}</h1>
             </div>
@@ -287,18 +289,26 @@ Here are some useful tools I developed:
           </div>
 
           <!-- Overlay for mobile when sidebar is open -->
-          ${isSidebarOpen && window.innerWidth < 768 ? '<div class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" onclick="toggleSidebar()"></div>' : ''}
 
           <!-- Main Content -->
-          <div class="flex-1 flex flex-col overflow-hidden">
+          <div class="${isMobile ? (isSidebarOpen ? 'hidden' : 'w-full') : 'flex-1'} flex flex-col overflow-hidden">
             <!-- Header -->
             <div class="h-14 border-b border-zinc-700 flex items-center px-4 gap-3">
-              <button 
-                onclick="toggleSidebar()"
-                class="text-zinc-400 hover:text-white transition-colors"
-              >
-                <i data-lucide="chevron-left" class="w-5 h-5 transition-transform ${isSidebarOpen ? '' : 'rotate-180'}"></i>
-              </button>
+              ${isMobile ? `
+                <button 
+                  onclick="toggleSidebar()"
+                  class="text-zinc-400 hover:text-white transition-colors"
+                >
+                  <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+              ` : `
+                <button 
+                  onclick="toggleSidebar()"
+                  class="text-zinc-400 hover:text-white transition-colors"
+                >
+                  <i data-lucide="chevron-left" class="w-5 h-5 transition-transform ${isSidebarOpen ? '' : 'rotate-180'}"></i>
+                </button>
+              `}
               <div class="flex items-center gap-2">
                 <span class="text-2xl">${currentNote.emoji}</span>
                 <h2 class="text-lg font-medium">${currentNote.title}</h2>
@@ -322,7 +332,7 @@ Here are some useful tools I developed:
 
     function selectNote(noteId) {
       selectedNote = noteId;
-      // Auto-close sidebar on mobile after selecting a note
+      // On mobile, close sidebar to show the note content
       if (window.innerWidth < 768) {
         isSidebarOpen = false;
       }
@@ -336,10 +346,11 @@ Here are some useful tools I developed:
 
     // Handle window resize
     window.addEventListener('resize', () => {
-      if (window.innerWidth >= 768 && !isSidebarOpen) {
+      isMobile = window.innerWidth < 768;
+      if (!isMobile && !isSidebarOpen) {
         isSidebarOpen = true;
-        render();
       }
+      render();
     });
 
     render();
