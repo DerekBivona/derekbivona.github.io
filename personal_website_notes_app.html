@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes - Apple Notes Inspired</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { margin: 0; padding: 0; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    #root { height: 100vh; }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    // ============================================
+    // EDIT YOUR NOTES HERE
+    // ============================================
+    const notes = [
+      { 
+        id: 'about-me',              // URL-friendly ID (no spaces)
+        title: 'about me',           // Display name in sidebar
+        emoji: '👋',                 // Icon for the note
+        content: `
+# About Me
+
+Hi! I'm Derek. I'm a researcher, engineer, and overhead athlete specialist, who is enthusiastic about machine learning and biomechanics.
+
+## Currently
+
+- Lead biomedical engineer and data scientist for the clinical cardiac electrophysiology program at UVA Health
+- Consultant for collegiate and professional baseball teams improving player health and performance
+
+## Previously
+
+- Built recommendation engine to improve pitcher-specific fastball velocity with Reboot Motion
+- Completed multiple statistical and machine learning projects to improve patient outcome in electrophysiology as a post-doc with Dr. Ken Bilchick
+- Earned PhD in biomedical engineering from the University of Virginia (go hoos)
+- Created biophysical and statistical models for predicting the progression and regression of cardiac growth
+- Obtained BS in biomedical engineering from Tulane University (roll wave) 
+- Developed experimental and computational frameworks to quantify regional variations of residual strain within the murine reproductive system to prevent preterm birth
+
+---
+
+---
+
+*This is a recreation of the design - the original uses server-side rendering and a database backend.*
+        `.trim()
+      },
+      
+      { 
+        id: 'tools',
+        title: 'tools',
+        emoji: '🛠',
+        content: `
+# tools
+
+Here are some useful tools I developed:
+
+- Machine learning for CRT response
+- Finite element models of myocardial infarction
+- Visualization of left atrium with scarring
+- Predictive models for fastball velocity
+
+---
+
+*This is a recreation of the design - the original uses server-side rendering and a database backend.*
+        `.trim()
+      },
+      
+      { 
+        id: 'quotes-to-live-by',
+        title: 'quotes to live by',
+        emoji: '🎙',
+        content: `
+# quotes to live by
+
+- Comparison is the thief of joy.
+- Your purpose is not to get love; it’s to give love.
+- Beginnings always hide themselves in ends.
+- Shared sorrow is half a sorrow; shared joy is doubled joy.
+- Wealth is equal to what you have minus what you want; that is the reason why some billionaires are broke.
+- Eat food. Not too much. Mostly plants.
+
+---
+
+        `.trim()
+      },
+      
+      { 
+        id: 'reading-list',
+        title: 'reading list',
+        emoji: '📚',
+        content: `
+# Reading List
+
+## Currently Reading
+
+- The Design of Everyday Things
+- Atomic Habits
+- Deep Work
+
+## Want to Read
+
+- Thinking, Fast and Slow
+- The Innovators
+- Sprint
+
+## Finished
+
+- Zero to One
+- The Lean Startup
+- Don't Make Me Think
+        `.trim()
+      },
+      
+      { 
+        id: 'bookmarks',
+        title: 'bookmarks',
+        emoji: '🔖',
+        content: `
+# Bookmarks
+
+## Design Resources
+
+- [Apple Design Resources](https://developer.apple.com/design/resources/)
+- [Figma Community](https://figma.com/community)
+- [Dribbble](https://dribbble.com)
+
+## Development
+
+- [Next.js Docs](https://nextjs.org/docs)
+- [Tailwind CSS](https://tailwindcss.com)
+- [MDN Web Docs](https://developer.mozilla.org)
+
+## Inspiration
+
+- [awwwards](https://awwwards.com)
+- [SiteInspire](https://siteinspire.com)
+        `.trim()
+      },
+      
+      { 
+        id: 'groceries',
+        title: 'groceries',
+        emoji: '🛒',
+        content: `
+# Groceries
+
+## This Week
+
+- [ ] Milk
+- [ ] Eggs
+- [ ] Bread
+- [ ] Coffee
+- [x] Apples
+- [x] Bananas
+- [ ] Spinach
+- [ ] Chicken
+
+## Staples
+
+- Rice
+- Pasta
+- Olive oil
+- Salt & pepper
+        `.trim()
+      }
+    ];
+
+    // ============================================
+    // CONFIGURATION (OPTIONAL)
+    // ============================================
+    const config = {
+      defaultNote: 'about-me',     // Which note opens first
+      sidebarTitle: 'notes',       // Title shown in sidebar header
+      sidebarColor: 'amber'        // Color theme: amber, blue, green, etc.
+    };
+
+    // ============================================
+    // APPLICATION CODE (NO NEED TO EDIT BELOW)
+    // ============================================
+    
+    let selectedNote = config.defaultNote;
+    let isSidebarOpen = true;
+
+    function renderContent(content) {
+      const lines = content.split('\n');
+      let html = '';
+      
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        
+        if (line.startsWith('# ')) {
+          html += `<h1 class="text-3xl font-bold mb-4 mt-8 first:mt-0">${line.slice(2)}</h1>`;
+        } else if (line.startsWith('## ')) {
+          html += `<h2 class="text-2xl font-semibold mb-3 mt-6">${line.slice(3)}</h2>`;
+        } else if (line.startsWith('- [x] ')) {
+          html += `<div class="flex items-center gap-2 mb-2">
+            <input type="checkbox" checked disabled class="w-4 h-4">
+            <span class="line-through text-zinc-400">${line.slice(6)}</span>
+          </div>`;
+        } else if (line.startsWith('- [ ] ')) {
+          html += `<div class="flex items-center gap-2 mb-2">
+            <input type="checkbox" disabled class="w-4 h-4">
+            <span>${line.slice(6)}</span>
+          </div>`;
+        } else if (line.startsWith('- **')) {
+          const match = line.match(/- \*\*(.+?)\*\*: (.+)/);
+          if (match) {
+            html += `<li class="mb-2 ml-4"><strong>${match[1]}</strong>: ${match[2]}</li>`;
+          } else {
+            html += `<li class="mb-2 ml-4">${line.slice(2)}</li>`;
+          }
+        } else if (line.startsWith('- ') || line.startsWith('* ')) {
+          html += `<li class="mb-2 ml-4">${line.slice(2)}</li>`;
+        } else if (line.match(/^\d+\. /)) {
+          html += `<li class="mb-2 ml-4">${line.replace(/^\d+\. /, '')}</li>`;
+        } else if (line.startsWith('---')) {
+          html += `<hr class="my-6 border-zinc-700">`;
+        } else if (line.startsWith('*') && line.endsWith('*') && !line.includes('**')) {
+          html += `<p class="italic text-zinc-400 text-sm mb-4">${line.slice(1, -1)}</p>`;
+        } else if (line.match(/\[.+?\]\(.+?\)/)) {
+          const match = line.match(/\[(.+?)\]\((.+?)\)/);
+          if (match) {
+            html += `<p class="mb-4">- <a href="${match[2]}" target="_blank" rel="noopener noreferrer" class="text-${config.sidebarColor}-400 hover:text-${config.sidebarColor}-300 underline">${match[1]}</a></p>`;
+          } else {
+            html += `<p class="mb-4">${line}</p>`;
+          }
+        } else if (line.trim()) {
+          html += `<p class="mb-4">${line}</p>`;
+        } else {
+          html += `<div class="h-2"></div>`;
+        }
+      }
+      
+      return html;
+    }
+
+    function render() {
+      const currentNote = notes.find(n => n.id === selectedNote);
+      const preview = currentNote.content.split('\n').find(line => line && !line.startsWith('#'));
+      
+      document.getElementById('root').innerHTML = `
+        <div class="flex h-screen bg-zinc-900 text-white overflow-hidden">
+          <!-- Sidebar -->
+          <div class="${isSidebarOpen ? 'w-64' : 'w-0'} transition-all duration-300 bg-zinc-800 border-r border-zinc-700 flex flex-col overflow-hidden">
+            <div class="p-4 border-b border-zinc-700">
+              <h1 class="text-xl font-semibold text-${config.sidebarColor}-400">${config.sidebarTitle}</h1>
+            </div>
+            
+            <div class="p-3 border-b border-zinc-700">
+              <div class="flex items-center bg-zinc-700 rounded-lg px-3 py-2">
+                <i data-lucide="search" class="w-4 h-4 text-zinc-400"></i>
+                <input 
+                  type="text" 
+                  placeholder="Search" 
+                  class="ml-2 bg-transparent text-sm outline-none flex-1 text-white placeholder-zinc-400"
+                >
+              </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto">
+              ${notes.map(note => {
+                const notePreview = note.content.split('\n').find(line => line && !line.startsWith('#'));
+                return `
+                  <div
+                    onclick="selectNote('${note.id}')"
+                    class="px-4 py-3 cursor-pointer border-b border-zinc-700 hover:bg-zinc-700 transition-colors ${selectedNote === note.id ? 'bg-zinc-700' : ''}"
+                  >
+                    <div class="flex items-start gap-2">
+                      <span class="text-lg">${note.emoji}</span>
+                      <div class="flex-1 min-w-0">
+                        <h3 class="text-sm font-medium truncate">${note.title}</h3>
+                        <p class="text-xs text-zinc-400 mt-1 line-clamp-2">
+                          ${notePreview ? notePreview.substring(0, 60) + '...' : ''}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="p-3 border-t border-zinc-700">
+              <button class="flex items-center gap-2 text-${config.sidebarColor}-400 text-sm hover:text-${config.sidebarColor}-300 transition-colors">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                New Note
+              </button>
+            </div>
+          </div>
+
+          <!-- Main Content -->
+          <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="h-14 border-b border-zinc-700 flex items-center px-4 gap-3">
+              <button 
+                onclick="toggleSidebar()"
+                class="text-zinc-400 hover:text-white transition-colors"
+              >
+                <i data-lucide="chevron-left" class="w-5 h-5 transition-transform ${isSidebarOpen ? '' : 'rotate-180'}"></i>
+              </button>
+              <div class="flex items-center gap-2">
+                <span class="text-2xl">${currentNote.emoji}</span>
+                <h2 class="text-lg font-medium">${currentNote.title}</h2>
+              </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="flex-1 overflow-y-auto p-8">
+              <div class="max-w-3xl mx-auto">
+                <div class="prose prose-invert prose-lg max-w-none">
+                  ${renderContent(currentNote.content)}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      lucide.createIcons();
+    }
+
+    function selectNote(noteId) {
+      selectedNote = noteId;
+      render();
+    }
+
+    function toggleSidebar() {
+      isSidebarOpen = !isSidebarOpen;
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>
