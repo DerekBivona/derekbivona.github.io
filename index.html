@@ -208,7 +208,10 @@ Here are some useful tools I developed:
             html += `<li class="mb-2 ml-4">${line.slice(2)}</li>`;
           }
         } else if (line.startsWith('- ') || line.startsWith('* ')) {
-          html += `<li class="mb-2 ml-4">${line.slice(2)}</li>`;
+          let listContent = line.slice(2);
+          // Process markdown links within list items
+          listContent = listContent.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-yellow-400 hover:text-yellow-300 underline decoration-yellow-400">$1</a>');
+          html += `<li class="mb-2 ml-4">${listContent}</li>`;
         } else if (line.match(/^\d+\. /)) {
           html += `<li class="mb-2 ml-4">${line.replace(/^\d+\. /, '')}</li>`;
         } else if (line.startsWith('---')) {
