@@ -30,7 +30,7 @@
         title: 'about me',           // Display name in sidebar
         emoji: '👋',                 // Icon for the note
         content: `
-# About Me
+# 👋 About Me
 
 Hi! I'm Derek. I'm a researcher, engineer, and overhead athlete specialist, who is enthusiastic about machine learning and biomechanics.
 
@@ -47,12 +47,6 @@ Hi! I'm Derek. I'm a researcher, engineer, and overhead athlete specialist, who 
 - Created biophysical and statistical models for predicting the progression and regression of cardiac growth
 - Obtained BS in biomedical engineering from Tulane University (roll wave) 
 - Developed experimental and computational frameworks to quantify regional variations of residual strain within the murine reproductive system to prevent preterm birth
-
----
-
----
-
-*This is a recreation of the design - the original uses server-side rendering and a database backend.*
         `.trim()
       },
       
@@ -61,7 +55,7 @@ Hi! I'm Derek. I'm a researcher, engineer, and overhead athlete specialist, who 
         title: 'tools',
         emoji: '🛠',
         content: `
-# tools
+# 🛠 tools
 
 Here are some useful tools I developed:
 
@@ -69,10 +63,6 @@ Here are some useful tools I developed:
 - Finite element models of myocardial infarction
 - Visualization of left atrium with scarring
 - Predictive models for fastball velocity
-
----
-
-*This is a recreation of the design - the original uses server-side rendering and a database backend.*
         `.trim()
       },
       
@@ -84,14 +74,11 @@ Here are some useful tools I developed:
 # quotes to live by
 
 - Comparison is the thief of joy.
-- Your purpose is not to get love; it’s to give love.
+- Your purpose is not to get love; it's to give love.
 - Beginnings always hide themselves in ends.
 - Shared sorrow is half a sorrow; shared joy is doubled joy.
 - Wealth is equal to what you have minus what you want; that is the reason why some billionaires are broke.
 - Eat food. Not too much. Mostly plants.
-
----
-
         `.trim()
       },
       
@@ -229,12 +216,10 @@ Here are some useful tools I developed:
         } else if (line.startsWith('*') && line.endsWith('*') && !line.includes('**')) {
           html += `<p class="italic text-zinc-400 text-sm mb-4">${line.slice(1, -1)}</p>`;
         } else if (line.match(/\[.+?\]\(.+?\)/)) {
-          const match = line.match(/\[(.+?)\]\((.+?)\)/);
-          if (match) {
-            html += `<p class="mb-4">- <a href="${match[2]}" target="_blank" rel="noopener noreferrer" class="text-${config.sidebarColor}-400 hover:text-${config.sidebarColor}-300 underline">${match[1]}</a></p>`;
-          } else {
-            html += `<p class="mb-4">${line}</p>`;
-          }
+          // Handle lines with markdown links
+          let processedLine = line;
+          processedLine = processedLine.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-yellow-400 hover:text-yellow-300 underline decoration-yellow-400">$1</a>');
+          html += `<p class="mb-4">${processedLine}</p>`;
         } else if (line.trim()) {
           html += `<p class="mb-4">${line}</p>`;
         } else {
