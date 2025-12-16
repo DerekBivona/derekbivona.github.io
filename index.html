@@ -177,7 +177,7 @@ Here are some useful tools I developed:
     // ============================================
     
     let selectedNote = config.defaultNote;
-    let isSidebarOpen = true;
+    let isSidebarOpen = window.innerWidth >= 768; // Auto-close on mobile
 
     function renderContent(content) {
       const lines = content.split('\n');
@@ -240,7 +240,7 @@ Here are some useful tools I developed:
       document.getElementById('root').innerHTML = `
         <div class="flex h-screen bg-zinc-900 text-white overflow-hidden">
           <!-- Sidebar -->
-          <div class="${isSidebarOpen ? 'w-64' : 'w-0'} transition-all duration-300 bg-zinc-800 border-r border-zinc-700 flex flex-col overflow-hidden">
+          <div class="${isSidebarOpen ? 'w-64 md:w-64' : 'w-0'} ${isSidebarOpen ? 'fixed md:relative' : ''} ${isSidebarOpen ? 'z-50' : ''} h-full transition-all duration-300 bg-zinc-800 border-r border-zinc-700 flex flex-col overflow-hidden">
             <div class="p-4 border-b border-zinc-700">
               <h1 class="text-xl font-semibold text-${config.sidebarColor}-400">${config.sidebarTitle}</h1>
             </div>
@@ -286,6 +286,9 @@ Here are some useful tools I developed:
             </div>
           </div>
 
+          <!-- Overlay for mobile when sidebar is open -->
+          ${isSidebarOpen && window.innerWidth < 768 ? '<div class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" onclick="toggleSidebar()"></div>' : ''}
+
           <!-- Main Content -->
           <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
@@ -319,6 +322,10 @@ Here are some useful tools I developed:
 
     function selectNote(noteId) {
       selectedNote = noteId;
+      // Auto-close sidebar on mobile after selecting a note
+      if (window.innerWidth < 768) {
+        isSidebarOpen = false;
+      }
       render();
     }
 
@@ -326,6 +333,14 @@ Here are some useful tools I developed:
       isSidebarOpen = !isSidebarOpen;
       render();
     }
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768 && !isSidebarOpen) {
+        isSidebarOpen = true;
+        render();
+      }
+    });
 
     render();
   </script>
