@@ -297,9 +297,10 @@ Here are some useful tools I developed:
               ${isMobile ? `
                 <button 
                   onclick="toggleSidebar()"
-                  class="text-zinc-400 hover:text-white transition-colors"
+                  class="flex items-center gap-2 text-${config.sidebarColor}-400 hover:text-${config.sidebarColor}-300 transition-colors font-medium"
                 >
                   <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                  <span>Notes</span>
                 </button>
               ` : `
                 <button 
@@ -308,12 +309,22 @@ Here are some useful tools I developed:
                 >
                   <i data-lucide="chevron-left" class="w-5 h-5 transition-transform ${isSidebarOpen ? '' : 'rotate-180'}"></i>
                 </button>
+                <div class="flex items-center gap-2">
+                  <span class="text-2xl">${currentNote.emoji}</span>
+                  <h2 class="text-lg font-medium">${currentNote.title}</h2>
+                </div>
               `}
-              <div class="flex items-center gap-2">
-                <span class="text-2xl">${currentNote.emoji}</span>
-                <h2 class="text-lg font-medium">${currentNote.title}</h2>
+            </div>
+
+            ${isMobile ? `
+            <!-- Mobile note title -->
+            <div class="px-6 pt-6 pb-2">
+              <div class="flex items-center gap-3">
+                <span class="text-4xl">${currentNote.emoji}</span>
+                <h2 class="text-2xl font-semibold">${currentNote.title}</h2>
               </div>
             </div>
+            ` : ''}
 
             <!-- Content Area -->
             <div class="flex-1 overflow-y-auto p-8">
