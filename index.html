@@ -27,7 +27,7 @@
     const notes = [
       { 
         id: 'about-me',              // URL-friendly ID (no spaces)
-        title: 'about me',           // Display name in sidebar
+        title: 'About Me',           // Display name in sidebar
         emoji: '👋',                 // Icon for the note
         content: `
 I'm Derek. I'm a researcher, engineer, and overhead athlete specialist, who is enthusiastic about machine learning and biomechanics.
@@ -35,7 +35,8 @@ I'm Derek. I'm a researcher, engineer, and overhead athlete specialist, who is e
 ## Currently
 
 - Lead biomedical engineer and data scientist for the clinical cardiac electrophysiology program at UVA Health
-- Consultant for college and professional baseball teams improving player health and performance
+- Consultant in applied biomechanics, data science, and player performance for college and professional baseball teams
+- Novel tennis player who needs to work on his backhand
 
 ## Previously
 
@@ -51,10 +52,22 @@ I'm Derek. I'm a researcher, engineer, and overhead athlete specialist, who is e
       
       { 
         id: 'publications',
-        title: 'publications',
+        title: 'Publications',
         emoji: '📚',
         content: `
-things I wrote:
+Things I wrote:
+
+- Paper 1...
+- Paper 2...
+        `.trim()
+      },
+
+      { 
+        id: 'tools',
+        title: 'Tools',
+        emoji: '🛠',
+        content: `
+Things I made:
 
 - Machine learning for CRT response
 - Finite element models of myocardial infarction
@@ -64,22 +77,8 @@ things I wrote:
       },
 
       { 
-        id: 'tools',
-        title: 'tools',
-        emoji: '🛠',
-        content: `
-Here are some useful tools I developed:
-
-- Machine learning for CRT response
-- Finite element models of myocardial infarction
-- Visualization of left atrium with scarring
-- Predictive models for fastball velocity
-        `.trim()
-      },
-
-            { 
-        id: 'quotes-to-live-by',
-        title: 'quotes to live by',
+        id: 'quotes-i-live-by',
+        title: 'Quotes I live by',
         emoji: '🎙',
         content: `
 - "Comparison is the thief of joy." - Theodore Roosevelt
@@ -89,91 +88,9 @@ Here are some useful tools I developed:
 - "Eat food. Not too much. Mostly plants." - Michael Pollan
 - “A healthy man wants a thousand things, a sick man only wants one.” - Confucius
 - "Beginnings always hide themselves in ends." - Mike Posner
-
-
         `.trim()
       },
       
-      
-      { 
-        id: 'reading-list',
-        title: 'reading list',
-        emoji: '📚',
-        content: `
-# Reading List
-
-## Currently Reading
-
-- The Design of Everyday Things
-- Atomic Habits
-- Deep Work
-
-## Want to Read
-
-- Thinking, Fast and Slow
-- The Innovators
-- Sprint
-
-## Finished
-
-- Zero to One
-- The Lean Startup
-- Don't Make Me Think
-        `.trim()
-      },
-      
-      { 
-        id: 'bookmarks',
-        title: 'bookmarks',
-        emoji: '🔖',
-        content: `
-# Bookmarks
-
-## Design Resources
-
-- [Apple Design Resources](https://developer.apple.com/design/resources/)
-- [Figma Community](https://figma.com/community)
-- [Dribbble](https://dribbble.com)
-
-## Development
-
-- [Next.js Docs](https://nextjs.org/docs)
-- [Tailwind CSS](https://tailwindcss.com)
-- [MDN Web Docs](https://developer.mozilla.org)
-
-## Inspiration
-
-- [awwwards](https://awwwards.com)
-- [SiteInspire](https://siteinspire.com)
-        `.trim()
-      },
-      
-      { 
-        id: 'groceries',
-        title: 'groceries',
-        emoji: '🛒',
-        content: `
-# Groceries
-
-## This Week
-
-- [ ] Milk
-- [ ] Eggs
-- [ ] Bread
-- [ ] Coffee
-- [x] Apples
-- [x] Bananas
-- [ ] Spinach
-- [ ] Chicken
-
-## Staples
-
-- Rice
-- Pasta
-- Olive oil
-- Salt & pepper
-        `.trim()
-      }
     ];
 
     // ============================================
