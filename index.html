@@ -26,9 +26,9 @@
     // ============================================
     const notes = [
       { 
-        id: 'about-me',              // URL-friendly ID (no spaces)
-        title: 'About Me',           // Display name in sidebar
-        emoji: '👋',                 // Icon for the note
+        id: 'about-me',
+        title: 'About Me',
+        emoji: '👋',
         content: `
 I'm Derek. I'm a researcher, engineer, and overhead athlete specialist, who is enthusiastic about machine learning and biomechanics.
 
@@ -66,8 +66,6 @@ Things I wrote:
 - **Bivona, Derek J**, Tallavajhala, Srikar, Abdi, Mohamad, Oomen, Pim JA, Gao, Xu, Malhotra, Rohit, Darby, Andrew, Monfredi, Oliver J, Mangrum, J Michael, Mason, Pamela, others (2022). [Cardiac magnetic resonance defines mechanisms of sex-based differences in outcomes following cardiac resynchronization therapy](https://pubmed.ncbi.nlm.nih.gov/36186999/). *Frontiers in Cardiovascular Medicine* 9, 1007806.
 - **Bivona, Derek J**, Tallavajhala, Srikar, Abdi, Mohamad, Oomen, Pim JA, Gao, Xu, Malhotra, Rohit, Darby, Andrew E, Monfredi, Oliver J, Mangrum, J Michael, Mason, Pamela K, others (2022). [Machine learning for multidimensional response and survival after cardiac resynchronization therapy using features from cardiac magnetic resonance](https://pubmed.ncbi.nlm.nih.gov/36340495/). *Heart Rhythm O2* 3, 542--552.
 - Capone, Daniel J, Clark, Gabrielle L, **Bivona, Derek**, Ogola, Benard O, Desrosiers, Laurephile, Knoepp, Leise R, Lindsey, Sarah H, Miller, Kristin S (2019). [Evaluating residual strain throughout the murine female reproductive system](https://pubmed.ncbi.nlm.nih.gov/30458959/). *Journal of biomechanics* 82, 299--306.
-
-
         `.trim()
       },
 
@@ -90,25 +88,48 @@ Things I made:
         title: 'Quotes I live by',
         emoji: '🎙',
         content: `
+Things I embody:
+
 - "Comparison is the thief of joy." - Theodore Roosevelt
 - "Your purpose is not to get love; it's to give love." - Mike Posner
-- "Shared joy is a double joy; shared sorrow is half sorrow." – Swedish proverb
-- "The best measure of wealth is what you have minus what you want. By this measure some billionaires are broke." – Morgan Housel
+- "Shared joy is a double joy; shared sorrow is half sorrow." — Swedish proverb
+- "The best measure of wealth is what you have minus what you want. By this measure some billionaires are broke." — Morgan Housel
 - "Eat food. Not too much. Mostly plants." - Michael Pollan
 - "A healthy man wants a thousand things, a sick man only wants one." - Confucius
 - "Beginnings always hide themselves in ends." - Mike Posner
         `.trim()
       },
-      
+
+      { 
+        id: 'people-who-inspre-me',
+        title: 'People Who Inspire Me',
+        emoji: '👥',
+        content: `
+People I admire:
+
+- Alec
+- Mom and dad
+- Ken Bilchick
+- Ben Sonin
+- Jon Bellion
+- Mike Posner
+- Andrew Huberman
+- Eric Cressey
+- Ernie Clement
+- Marcus Stroman
+- Steve Harrington
+        `.trim()
+      },
     ];
 
     // ============================================
     // CONFIGURATION (OPTIONAL)
     // ============================================
     const config = {
-      defaultNote: 'about-me',     // Which note opens first
-      sidebarTitle: 'notes',       // Title shown in sidebar header
-      sidebarColor: 'amber'        // Color theme: amber, blue, green, etc.
+      defaultNote: 'about-me',
+      sidebarTitle: 'notes',
+      sidebarColor: 'amber',
+      headerText: 'Derek J. Bivona, PhD'  // Header text shown at top of notes
     };
 
     // ============================================
@@ -116,7 +137,7 @@ Things I made:
     // ============================================
     
     let selectedNote = config.defaultNote;
-    let isSidebarOpen = true; // Always start with sidebar visible
+    let isSidebarOpen = true;
     let isMobile = window.innerWidth < 768;
 
     function renderContent(content) {
@@ -142,11 +163,8 @@ Things I made:
           </div>`;
         } else if (line.startsWith('- ') || line.startsWith('* ')) {
           let listContent = line.slice(2);
-          // Process markdown links within list items
           listContent = listContent.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-yellow-400 hover:text-yellow-300 underline decoration-yellow-400">$1</a>');
-          // Process bold text within list items (add this line)
           listContent = listContent.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-          // Process italic text within list items
           listContent = listContent.replace(/\*(.+?)\*/g, '<em>$1</em>');
           html += `<li class="mb-2 ml-4">${listContent}</li>`;
         } else if (line.match(/^\d+\. /)) {
@@ -156,7 +174,6 @@ Things I made:
         } else if (line.startsWith('*') && line.endsWith('*') && !line.includes('**')) {
           html += `<p class="italic text-zinc-400 text-sm mb-4">${line.slice(1, -1)}</p>`;
         } else if (line.match(/\[.+?\]\(.+?\)/)) {
-          // Handle lines with markdown links
           let processedLine = line;
           processedLine = processedLine.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-yellow-400 hover:text-yellow-300 underline decoration-yellow-400">$1</a>');
           html += `<p class="mb-4">${processedLine}</p>`;
@@ -224,8 +241,6 @@ Things I made:
             </div>
           </div>
 
-          <!-- Overlay for mobile when sidebar is open -->
-
           <!-- Main Content -->
           <div class="${isMobile ? (isSidebarOpen ? 'hidden' : 'w-full') : 'flex-1'} flex flex-col overflow-hidden">
             <!-- Header -->
@@ -263,18 +278,21 @@ Things I made:
             ` : ''}
 
             <!-- Content Area -->
-            <div class="flex-1 overflow-y-auto p-8">
-              <div class="max-w-3xl mx-auto">
-                <div class="prose prose-invert prose-lg max-w-none">
-                  ${renderContent(currentNote.content)}
-                </div>
+            <div class="flex-1 overflow-y-auto px-8 py-6">
+              <!-- Header text like Apple Notes -->
+              <div class="mb-6">
+                <p class="text-sm text-zinc-500 font-medium">${config.headerText}</p>
+              </div>
+              
+              <!-- Main content -->
+              <div class="prose prose-invert prose-lg max-w-none">
+                ${renderContent(currentNote.content)}
               </div>
             </div>
           </div>
         </div>
       `;
       
-      // Make sure Lucide icons are created after render
       if (typeof lucide !== 'undefined' && lucide.createIcons) {
         setTimeout(() => lucide.createIcons(), 0);
       }
@@ -282,7 +300,6 @@ Things I made:
 
     function selectNote(noteId) {
       selectedNote = noteId;
-      // On mobile, close sidebar to show the note content
       if (window.innerWidth < 768) {
         isSidebarOpen = false;
       }
@@ -294,7 +311,6 @@ Things I made:
       render();
     }
 
-    // Handle window resize
     window.addEventListener('resize', () => {
       isMobile = window.innerWidth < 768;
       if (!isMobile && !isSidebarOpen) {
