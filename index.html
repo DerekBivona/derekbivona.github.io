@@ -148,7 +148,7 @@ People I admire:
         const line = lines[i];
         
         if (line.startsWith('# ')) {
-          html += `<h1 class="text-3xl font-bold mb-4 mt-8 first:mt-0">${line.slice(2)}</h1>`;
+          html += `<h1 class="text-3xl font-bold mb-4 mt-6">${line.slice(2)}</h1>`;
         } else if (line.startsWith('## ')) {
           html += `<h2 class="text-2xl font-semibold mb-3 mt-6">${line.slice(3)}</h2>`;
         } else if (line.startsWith('- [x] ')) {
@@ -269,8 +269,11 @@ People I admire:
 
             ${isMobile ? `
             <!-- Mobile note title -->
-            <div class="px-6 pt-6 pb-2">
-              <div class="flex items-center gap-3">
+            <div class="px-6 pt-6 pb-4 text-center">
+              <!-- Header text -->
+              <p class="text-sm text-zinc-500 font-medium mb-4">${config.headerText}</p>
+              <!-- Note title -->
+              <div class="flex items-center justify-center gap-3">
                 <span class="text-4xl">${currentNote.emoji}</span>
                 <h2 class="text-2xl font-semibold">${currentNote.title}</h2>
               </div>
@@ -278,11 +281,17 @@ People I admire:
             ` : ''}
 
             <!-- Content Area -->
-            <div class="flex-1 overflow-y-auto px-8 py-6">
-              <!-- Header text like Apple Notes -->
+            <div class="flex-1 overflow-y-auto px-8 ${isMobile ? 'py-4' : 'py-6'}">
+              ${!isMobile ? `
+              <!-- Desktop header and title -->
               <div class="mb-6 text-center">
-                <p class="text-sm text-zinc-500 font-medium">${config.headerText}</p>
+                <p class="text-sm text-zinc-500 font-medium mb-4">${config.headerText}</p>
+                <div class="flex items-center justify-center gap-3 mb-6">
+                  <span class="text-4xl">${currentNote.emoji}</span>
+                  <h2 class="text-3xl font-bold">${currentNote.title}</h2>
+                </div>
               </div>
+              ` : ''}
               
               <!-- Main content -->
               <div class="prose prose-invert prose-lg max-w-none">
