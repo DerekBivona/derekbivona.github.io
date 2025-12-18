@@ -131,7 +131,7 @@ People I admire:
       defaultNote: 'about-me',
       sidebarTitle: 'Notes',
       sidebarColor: 'amber',
-      headerText: 'Derek J. Bivona, PhD'  // Header text shown at top of notes
+      headerText: 'Derek J. Bivona, PhD'
     };
 
     // ============================================
@@ -216,16 +216,17 @@ People I admire:
             <div class="flex-1 overflow-y-auto">
               ${notes.map(note => {
                 const notePreview = note.content.split('\n').find(line => line && !line.startsWith('#'));
+                const isSelected = selectedNote === note.id;
                 return `
                   <div
                     onclick="selectNote('${note.id}')"
-                    class="px-4 py-3 cursor-pointer border-b border-zinc-700 hover:bg-zinc-700 transition-colors ${selectedNote === note.id ? 'bg-zinc-700' : ''}"
+                    class="px-4 py-3 cursor-pointer border-b border-zinc-700 hover:bg-zinc-700 transition-colors ${isSelected ? 'bg-yellow-600 hover:bg-yellow-600' : ''}"
                   >
                     <div class="flex items-start gap-2">
                       <span class="text-lg">${note.emoji}</span>
                       <div class="flex-1 min-w-0">
                         <h3 class="text-sm font-medium truncate">${note.title}</h3>
-                        <p class="text-xs text-zinc-400 mt-1 line-clamp-2">
+                        <p class="text-xs ${isSelected ? 'text-zinc-200' : 'text-zinc-400'} mt-1 line-clamp-2">
                           ${notePreview ? notePreview.substring(0, 60) + '...' : ''}
                         </p>
                       </div>
@@ -245,45 +246,40 @@ People I admire:
 
           <!-- Main Content -->
           <div class="${isMobile ? (isSidebarOpen ? 'hidden' : 'w-full') : 'flex-1'} flex flex-col overflow-hidden">
-            <!-- Header -->
-            <div class="h-14 border-b border-zinc-700 flex items-center px-4 gap-3">
-              ${isMobile ? `
-                <button 
-                  onclick="toggleSidebar()"
-                  class="flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-colors font-medium text-lg"
-                >
-                  <span class="text-2xl">‹</span>
-                  <span>Notes</span>
-                </button>
-              ` : `
-                <button 
-                  onclick="toggleSidebar()"
-                  class="text-zinc-400 hover:text-white transition-colors"
-                >
-                  <i data-lucide="chevron-left" class="w-5 h-5 transition-transform ${isSidebarOpen ? '' : 'rotate-180'}"></i>
-                </button>
-                <div class="flex items-center gap-2">
-                  <span class="text-2xl">${currentNote.emoji}</span>
-                  <h2 class="text-lg font-medium">${currentNote.title}</h2>
-                </div>
-              `}
-            </div>
-
             ${isMobile ? `
+            <!-- Mobile back button -->
+            <div class="h-14 border-b border-zinc-700 flex items-center px-4">
+              <button 
+                onclick="toggleSidebar()"
+                class="flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-colors font-medium text-lg"
+              >
+                <span class="text-2xl">‹</span>
+                <span>Notes</span>
+              </button>
+            </div>
+            
             <!-- Mobile note title -->
             <div class="px-6 pt-6 pb-4">
-              <!-- Header text -->
               <p class="text-sm text-zinc-500 font-medium mb-4 text-center">${config.headerText}</p>
-              <!-- Note title -->
               <div class="flex items-center gap-3">
                 <span class="text-4xl">${currentNote.emoji}</span>
                 <h2 class="text-2xl font-semibold">${currentNote.title}</h2>
               </div>
             </div>
-            ` : ''}
+            ` : `
+            <!-- Desktop sidebar toggle -->
+            <div class="h-14 border-b border-zinc-700 flex items-center px-4">
+              <button 
+                onclick="toggleSidebar()"
+                class="text-zinc-400 hover:text-white transition-colors"
+              >
+                <i data-lucide="chevron-left" class="w-5 h-5 transition-transform ${isSidebarOpen ? '' : 'rotate-180'}"></i>
+              </button>
+            </div>
+            `}
 
             <!-- Content Area -->
-            <div class="flex-1 overflow-y-auto px-8 ${isMobile ? 'py-4' : 'py-6'}">
+            <div class="flex-1 overflow-y-auto px-8 py-6">
               ${!isMobile ? `
               <!-- Desktop header and title -->
               <div class="mb-6">
