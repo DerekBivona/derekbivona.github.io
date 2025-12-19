@@ -17,9 +17,11 @@
       overflow: hidden;
     }
     .textured-bg {
+      background-color: #18181b;
       background-image: url('notes_texture_background.png');
       background-repeat: repeat;
       background-size: auto;
+      position: relative;
     }
     .textured-bg::before {
       content: '';
@@ -268,7 +270,7 @@ People I admire:
           <div class="${isMobile ? (isSidebarOpen ? 'hidden' : 'w-full') : 'flex-1'} flex flex-col overflow-hidden textured-bg">
             ${isMobile ? `
             <!-- Mobile back button -->
-            <div class="h-14 border-b border-zinc-700 flex items-center px-4">
+            <div class="h-14 flex items-center px-4">
               <button 
                 onclick="toggleSidebar()"
                 class="flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-colors font-medium text-lg"
@@ -288,7 +290,7 @@ People I admire:
             </div>
             ` : `
             <!-- Desktop sidebar toggle -->
-            <div class="h-14 border-b border-zinc-700 flex items-center px-4">
+            <div class="h-14 flex items-center px-4">
               <button 
                 onclick="toggleSidebar()"
                 class="text-zinc-400 hover:text-white transition-colors"
