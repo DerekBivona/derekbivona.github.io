@@ -13,17 +13,19 @@
       padding: 0; 
       overflow: hidden; 
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      /* Add these lines below */
-      background-image: url('notes_texture_background.png');
+      /* The background is set here to ensure it covers the whole screen */
+      background-color: #18181b; 
+    }
+    
+    #root { height: 100vh; }
+
+    /* Custom class to apply your texture with a dark overlay for readability */
+    .app-container-bg {
+      background-image: linear-gradient(rgba(24, 24, 27, 0.85), rgba(24, 24, 27, 0.85)), 
+                        url('notes_texture_background.png');
       background-repeat: repeat;
       background-size: auto;
     }
-    #root { height: 100vh; }
-    
-    /* Optional: Make the sidebar and content areas slightly transparent 
-       to let the texture show through */
-    .bg-zinc-900 { background-color: rgba(24, 24, 27, 0.85); }
-    .bg-zinc-800 { background-color: rgba(39, 39, 42, 0.85); }
 
     .line-clamp-2 {
       display: -webkit-box;
@@ -31,15 +33,17 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
+
+    /* Smooth scrollbar for the content area */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
   </style>
 </head>
 <body>
   <div id="root"></div>
 
   <script>
-    // ============================================
-    // EDIT YOUR NOTES HERE
-    // ============================================
     const notes = [
       { 
         id: 'about-me',
@@ -60,7 +64,7 @@ I'm Derek. I'm a researcher, engineer, and sports scientist, who is enthusiastic
 - Completed multiple statistical and machine learning projects to improve patient outcome in electrophysiology as a post-doc with Dr. Ken Bilchick
 - Earned a PhD in biomedical engineering from the University of Virginia (go hoos ⚔️)
 - Created biophysical and statistical models for predicting the progression and regression of cardiac growth
-- Obtained a BS in biomedical engineering from Tulane University (roll wave 🌊) 
+- Obtained a BS in biomedical engineering from Tulane University (roll wave 🌊)
 - Developed experimental and computational frameworks to quantify regional variations of residual strain within the murine reproductive system to prevent preterm birth
 - Played shortstop and ate crawfish as a kid who grew up in New Orleans, Louisiana
         `.trim()
@@ -139,9 +143,6 @@ People I admire:
       },
     ];
 
-    // ============================================
-    // CONFIGURATION (OPTIONAL)
-    // ============================================
     const config = {
       defaultNote: 'about-me',
       sidebarTitle: 'Notes',
@@ -149,10 +150,6 @@ People I admire:
       headerText: 'Derek J. Bivona, PhD'
     };
 
-    // ============================================
-    // APPLICATION CODE (NO NEED TO EDIT BELOW)
-    // ============================================
-    
     let selectedNote = config.defaultNote;
     let isSidebarOpen = true;
     let isMobile = window.innerWidth < 768;
@@ -169,15 +166,9 @@ People I admire:
         } else if (line.startsWith('## ')) {
           html += `<h2 class="text-2xl font-semibold mb-3 mt-6">${line.slice(3)}</h2>`;
         } else if (line.startsWith('- [x] ')) {
-          html += `<div class="flex items-center gap-2 mb-2">
-            <input type="checkbox" checked disabled class="w-4 h-4">
-            <span class="line-through text-zinc-400">${line.slice(6)}</span>
-          </div>`;
+          html += `<div class="flex items-center gap-2 mb-2"><input type="checkbox" checked disabled class="w-4 h-4"><span class="line-through text-zinc-400">${line.slice(6)}</span></div>`;
         } else if (line.startsWith('- [ ] ')) {
-          html += `<div class="flex items-center gap-2 mb-2">
-            <input type="checkbox" disabled class="w-4 h-4">
-            <span>${line.slice(6)}</span>
-          </div>`;
+          html += `<div class="flex items-center gap-2 mb-2"><input type="checkbox" disabled class="w-4 h-4"><span>${line.slice(6)}</span></div>`;
         } else if (line.startsWith('- ') || line.startsWith('* ')) {
           let listContent = line.slice(2);
           listContent = listContent.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-yellow-400 hover:text-yellow-300 underline decoration-yellow-400">$1</a>');
@@ -187,44 +178,32 @@ People I admire:
         } else if (line.match(/^\d+\. /)) {
           html += `<li class="mb-2 ml-4">${line.replace(/^\d+\. /, '')}</li>`;
         } else if (line.startsWith('---')) {
-          html += `<hr class="my-6 border-zinc-700">`;
-        } else if (line.startsWith('*') && line.endsWith('*') && !line.includes('**')) {
-          html += `<p class="italic text-zinc-400 text-sm mb-4">${line.slice(1, -1)}</p>`;
-        } else if (line.match(/\[.+?\]\(.+?\)/)) {
-          let processedLine = line;
-          processedLine = processedLine.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-yellow-400 hover:text-yellow-300 underline decoration-yellow-400">$1</a>');
-          html += `<p class="mb-4">${processedLine}</p>`;
+          html += `<hr class="my-6 border-zinc-700/50">`;
         } else if (line.trim()) {
-          html += `<p class="mb-4">${line}</p>`;
+          let processedLine = line.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-yellow-400 hover:text-yellow-300 underline decoration-yellow-400">$1</a>');
+          html += `<p class="mb-4">${processedLine}</p>`;
         } else {
           html += `<div class="h-2"></div>`;
         }
       }
-      
       return html;
     }
 
     function render() {
       const currentNote = notes.find(n => n.id === selectedNote);
-      const preview = currentNote.content.split('\n').find(line => line && !line.startsWith('#'));
       isMobile = window.innerWidth < 768;
       
       document.getElementById('root').innerHTML = `
-        <div class="flex h-screen bg-zinc-900 text-white overflow-hidden">
-          <!-- Sidebar -->
-          <div class="${isMobile ? (isSidebarOpen ? 'w-full' : 'hidden') : (isSidebarOpen ? 'w-64' : 'w-0')} transition-all duration-300 bg-zinc-800 border-r border-zinc-700 flex flex-col overflow-hidden">
-            <div class="p-4 border-b border-zinc-700">
+        <div class="flex h-screen app-container-bg text-white overflow-hidden">
+          <div class="${isMobile ? (isSidebarOpen ? 'w-full' : 'hidden') : (isSidebarOpen ? 'w-64' : 'w-0')} transition-all duration-300 bg-black/20 backdrop-blur-sm border-r border-white/10 flex flex-col overflow-hidden">
+            <div class="p-4 border-b border-white/10">
               <h1 class="text-xl font-semibold text-${config.sidebarColor}-400">${config.sidebarTitle}</h1>
             </div>
             
-            <div class="p-3 border-b border-zinc-700">
-              <div class="flex items-center bg-zinc-700 rounded-lg px-3 py-2">
+            <div class="p-3 border-b border-white/10">
+              <div class="flex items-center bg-white/10 rounded-lg px-3 py-2">
                 <i data-lucide="search" class="w-4 h-4 text-zinc-400"></i>
-                <input 
-                  type="text" 
-                  placeholder="Tap below to learn more" 
-                  class="ml-2 bg-transparent text-sm outline-none flex-1 text-white placeholder-zinc-400"
-                >
+                <input type="text" placeholder="Tap below to learn more" class="ml-2 bg-transparent text-sm outline-none flex-1 text-white placeholder-zinc-400">
               </div>
             </div>
 
@@ -233,15 +212,12 @@ People I admire:
                 const notePreview = note.content.split('\n').find(line => line && !line.startsWith('#'));
                 const isSelected = selectedNote === note.id;
                 return `
-                  <div
-                    onclick="selectNote('${note.id}')"
-                    class="px-4 py-3 cursor-pointer border-b border-zinc-700 transition-colors ${isSelected ? 'bg-yellow-600 hover:bg-yellow-600' : 'hover:bg-zinc-700'}"
-                  >
+                  <div onclick="selectNote('${note.id}')" class="px-4 py-3 cursor-pointer border-b border-white/5 transition-colors ${isSelected ? 'bg-yellow-600/60' : 'hover:bg-white/5'}">
                     <div class="flex items-start gap-2">
                       <span class="text-lg">${note.emoji}</span>
                       <div class="flex-1 min-w-0">
                         <h3 class="text-sm font-medium truncate">${note.title}</h3>
-                        <p class="text-xs ${isSelected ? 'text-zinc-200' : 'text-zinc-400'} mt-1 line-clamp-2">
+                        <p class="text-xs ${isSelected ? 'text-zinc-100' : 'text-zinc-400'} mt-1 line-clamp-2">
                           ${notePreview ? notePreview.substring(0, 60) + '...' : ''}
                         </p>
                       </div>
@@ -250,81 +226,37 @@ People I admire:
                 `;
               }).join('')}
             </div>
-
-            <div class="p-3 border-t border-zinc-700">
-              <button class="flex items-center gap-2 text-${config.sidebarColor}-400 text-sm hover:text-${config.sidebarColor}-300 transition-colors">
-                <i data-lucide="plus" class="w-4 h-4"></i>
-                New Note
-              </button>
-            </div>
           </div>
 
-          <!-- Main Content -->
           <div class="${isMobile ? (isSidebarOpen ? 'hidden' : 'w-full') : 'flex-1'} flex flex-col overflow-hidden">
-            ${isMobile ? `
-            <!-- Mobile back button -->
-            <div class="h-14 border-b border-zinc-700 flex items-center px-4">
-              <button 
-                onclick="toggleSidebar()"
-                class="flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-colors font-medium text-lg"
-              >
-                <span class="text-2xl">‹</span>
-                <span>Notes</span>
+            <div class="h-14 border-b border-white/10 flex items-center px-4">
+              <button onclick="toggleSidebar()" class="text-zinc-400 hover:text-white transition-colors">
+                <i data-lucide="${isMobile ? 'chevron-left' : 'sidebar'}" class="w-5 h-5"></i>
               </button>
             </div>
-            
-            <!-- Mobile note title -->
-            <div class="px-6 pt-6 pb-4">
-              <p class="text-sm text-zinc-500 font-medium mb-4 text-center">${config.headerText}</p>
-              <div class="flex items-center gap-3">
-                <span class="text-4xl">${currentNote.emoji}</span>
-                <h2 class="text-2xl font-semibold">${currentNote.title}</h2>
-              </div>
-            </div>
-            ` : `
-            <!-- Desktop sidebar toggle -->
-            <div class="h-14 border-b border-zinc-700 flex items-center px-4">
-              <button 
-                onclick="toggleSidebar()"
-                class="text-zinc-400 hover:text-white transition-colors"
-              >
-                <i data-lucide="chevron-left" class="w-5 h-5 transition-transform ${isSidebarOpen ? '' : 'rotate-180'}"></i>
-              </button>
-            </div>
-            `}
 
-            <!-- Content Area -->
             <div class="flex-1 overflow-y-auto px-8 py-6">
-              ${!isMobile ? `
-              <!-- Desktop header and title -->
-              <div class="mb-6">
-                <p class="text-sm text-zinc-500 font-medium mb-4 text-center">${config.headerText}</p>
-                <div class="flex items-center gap-3 mb-6">
+              <div class="mb-6 max-w-3xl mx-auto">
+                <p class="text-xs text-zinc-500 font-medium mb-4 text-center uppercase tracking-widest">${config.headerText}</p>
+                <div class="flex items-center gap-3 mb-8">
                   <span class="text-4xl">${currentNote.emoji}</span>
-                  <h2 class="text-3xl font-bold">${currentNote.title}</h2>
+                  <h2 class="text-3xl font-bold tracking-tight">${currentNote.title}</h2>
                 </div>
-              </div>
-              ` : ''}
-              
-              <!-- Main content -->
-              <div class="prose prose-invert prose-lg max-w-none">
-                ${renderContent(currentNote.content)}
+                <div class="prose prose-invert prose-zinc max-w-none">
+                  ${renderContent(currentNote.content)}
+                </div>
               </div>
             </div>
           </div>
         </div>
       `;
       
-      if (typeof lucide !== 'undefined' && lucide.createIcons) {
-        setTimeout(() => lucide.createIcons(), 0);
-      }
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function selectNote(noteId) {
       selectedNote = noteId;
-      if (window.innerWidth < 768) {
-        isSidebarOpen = false;
-      }
+      if (window.innerWidth < 768) isSidebarOpen = false;
       render();
     }
 
@@ -335,9 +267,7 @@ People I admire:
 
     window.addEventListener('resize', () => {
       isMobile = window.innerWidth < 768;
-      if (!isMobile && !isSidebarOpen) {
-        isSidebarOpen = true;
-      }
+      if (!isMobile && !isSidebarOpen) isSidebarOpen = true;
       render();
     });
 
