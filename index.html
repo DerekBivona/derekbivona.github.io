@@ -213,6 +213,11 @@ People I admire:
       return html;
     }
 
+    function stripMarkdownLinks(text) {
+      // Remove markdown links but keep the link text
+      return text.replace(/\[(.+?)\]\((.+?)\)/g, '$1');
+    }
+
     function render() {
       const currentNote = notes.find(n => n.id === selectedNote);
       const preview = currentNote.content.split('\n').find(line => line && !line.startsWith('#'));
@@ -241,6 +246,7 @@ People I admire:
               ${notes.map(note => {
                 const notePreview = note.content.split('\n').find(line => line && !line.startsWith('#'));
                 const isSelected = selectedNote === note.id;
+                const cleanPreview = notePreview ? stripMarkdownLinks(notePreview).substring(0, 60) : '';
                 return `
                   <div
                     onclick="selectNote('${note.id}')"
@@ -251,7 +257,7 @@ People I admire:
                       <div class="flex-1 min-w-0">
                         <h3 class="text-sm font-medium truncate">${note.title}</h3>
                         <p class="text-xs ${isSelected ? 'text-zinc-200' : 'text-zinc-400'} mt-1 line-clamp-2">
-                          ${notePreview ? notePreview.substring(0, 60) + '...' : ''}
+                          ${cleanPreview}...
                         </p>
                       </div>
                     </div>
