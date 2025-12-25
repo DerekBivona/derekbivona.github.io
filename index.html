@@ -38,6 +38,9 @@
       position: relative;
       z-index: 1;
     }
+    .prose p, .prose li {
+      font-weight: 300;
+    }
   </style>
 </head>
 <body>
@@ -52,6 +55,7 @@
         id: 'about-me',
         title: 'About Me',
         emoji: '👋',
+        section: 'pinned',
         content: `
 I'm [Derek](https://www.linkedin.com/in/derek-bivona-0a9b32a8/). I'm a researcher, engineer, and sports scientist, who is enthusiastic about machine learning and biomechanics.
 
@@ -77,6 +81,7 @@ I'm [Derek](https://www.linkedin.com/in/derek-bivona-0a9b32a8/). I'm a researche
         id: 'lets-link',
         title: "Let's Link",
         emoji: '☎️',
+        section: 'pinned',
         content: `
 - [Email](mailto:djb6ab@virginia.edu) - Always monitoring, diligently responding
 - [Instagram](https://www.instagram.com/derekbivona/?hl=en) - Seldomly photodumping, actively doomscrolling
@@ -91,6 +96,7 @@ I'm [Derek](https://www.linkedin.com/in/derek-bivona-0a9b32a8/). I'm a researche
         id: 'publications',
         title: 'Publications',
         emoji: '📚',
+        section: 'previous-7-days',
         content: `
 - Bilchick, Kenneth C, Cochran, Jesse D, McSkimming, Chantel, Kothari, Hema, Ma, Zhaoxia, **Bivona, Derek J**, Bekiranov, Stefan, McNamara, Coleen (2025). [Cxc-chemokine-receptor-type-5 expression on circulating naive b cells predicts improvement after cardiac resynchronization therapy](https://pubmed.ncbi.nlm.nih.gov/40131157/). *Basic to Translational Science* 10, 221--223.
 - Gurnani, Mehak, Patlatzoglou, Konstantinos, Barker, Joseph, **Bivona, Derek**, Pastika, Libor, Sieliwonczyk, Ewa, Zeidaabadi, Boroumand, Inglese, Paolo, Curran, Lara, Arnold, Ahran D, others (2025). [Revisiting abnormalities of ventricular depolarization: redefining phenotypes and associated outcomes using tree-based dimensionality reduction](https://pubmed.ncbi.nlm.nih.gov/40530476/). *Journal of the American Heart Association*, e040814.
@@ -108,6 +114,7 @@ I'm [Derek](https://www.linkedin.com/in/derek-bivona-0a9b32a8/). I'm a researche
         id: 'tools',
         title: 'Tools',
         emoji: '🛠',
+        section: 'previous-7-days',
         content: `
 - [Recommendation engine for pitcher-specific fastball velocity improvement](https://learnyourkeep.substack.com/p/building-on-top-of-reboot-motion)
 - [Calculator for CRT response and survival (username: tester, password: BilchickCRT)](https://gmmxcrt.pythonanywhere.com/)
@@ -120,6 +127,7 @@ I'm [Derek](https://www.linkedin.com/in/derek-bivona-0a9b32a8/). I'm a researche
         id: 'words-i-live-by',
         title: 'Words I live by',
         emoji: '🎙',
+        section: 'previous-30-days',
         content: `
 - "Comparison is the thief of joy." - Theodore Roosevelt
 - "Fall down seven times, get up eight." - Japanese proverb
@@ -138,6 +146,7 @@ I'm [Derek](https://www.linkedin.com/in/derek-bivona-0a9b32a8/). I'm a researche
         id: 'people-i-admire',
         title: 'People I Admire',
         emoji: '👥',
+        section: 'previous-30-days',
         content: `
 - Alec Bivona
 - Ken Bilchick
@@ -219,9 +228,43 @@ I'm [Derek](https://www.linkedin.com/in/derek-bivona-0a9b32a8/). I'm a researche
     }
 
     function stripMarkdownLinks(text) {
-      // Remove markdown links but keep the link text
-      // Also replace markdown list markers with bullet points
       return text.replace(/\[(.+?)\]\((.+?)\)/g, '$1').replace(/^- /, '• ');
+    }
+
+    function renderNotesBySection(section, sectionTitle, sectionIcon, isFirst = false) {
+      const sectionNotes = notes.filter(n => n.section === section);
+      if (sectionNotes.length === 0) return '';
+      
+      return `
+        <div class="px-4 ${isFirst ? 'pt-3' : 'pt-3'} pb-2 flex items-center gap-1.5 text-zinc-500 text-xs font-medium">
+          <i data-lucide="${sectionIcon}" class="w-3.5 h-3.5"></i>
+          <span>${sectionTitle}</span>
+        </div>
+        ${sectionNotes.map((note, index) => {
+          const notePreview = note.content.split('\n').find(line => line && !line.startsWith('#'));
+          const isSelected = selectedNote === note.id;
+          const cleanPreview = notePreview ? stripMarkdownLinks(notePreview).substring(0, 60) : '';
+          return `
+            <div class="mx-2">
+              <div
+                onclick="selectNote('${note.id}')"
+                class="px-4 py-3 cursor-pointer transition-colors ${isSelected ? 'bg-yellow-600 hover:bg-yellow-600 rounded-lg' : 'hover:bg-zinc-700 rounded-lg'}"
+              >
+                <div class="flex items-start gap-2">
+                  <span class="text-lg">${note.emoji}</span>
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-sm font-medium truncate">${note.title}</h3>
+                    <p class="text-xs ${isSelected ? 'text-zinc-200' : 'text-zinc-400'} mt-1 line-clamp-2">
+                      ${cleanPreview}...
+                    </p>
+                  </div>
+                </div>
+              </div>
+              ${!isSelected && index < sectionNotes.length - 1 ? '<div class="mt-3 mx-2"><div class="h-px bg-zinc-700"></div></div>' : '<div class="mt-3"></div>'}
+            </div>
+          `;
+        }).join('')}
+      `;
     }
 
     function render() {
@@ -256,34 +299,9 @@ I'm [Derek](https://www.linkedin.com/in/derek-bivona-0a9b32a8/). I'm a researche
             </div>
 
             <div class="flex-1 overflow-y-auto">
-              <div class="px-4 pt-3 pb-2 flex items-center gap-1.5 text-zinc-500 text-xs font-medium">
-                <i data-lucide="pin" class="w-3.5 h-3.5"></i>
-                <span>Pinned</span>
-              </div>
-              ${notes.map(note => {
-                const notePreview = note.content.split('\n').find(line => line && !line.startsWith('#'));
-                const isSelected = selectedNote === note.id;
-                const cleanPreview = notePreview ? stripMarkdownLinks(notePreview).substring(0, 60) : '';
-                return `
-                  <div class="mx-2">
-                    <div
-                      onclick="selectNote('${note.id}')"
-                      class="px-4 py-3 cursor-pointer transition-colors ${isSelected ? 'bg-yellow-600 hover:bg-yellow-600 rounded-lg' : 'hover:bg-zinc-700 rounded-lg'}"
-                    >
-                      <div class="flex items-start gap-2">
-                        <span class="text-lg">${note.emoji}</span>
-                        <div class="flex-1 min-w-0">
-                          <h3 class="text-sm font-medium truncate">${note.title}</h3>
-                          <p class="text-xs ${isSelected ? 'text-zinc-200' : 'text-zinc-400'} mt-1 line-clamp-2">
-                            ${cleanPreview}...
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    ${!isSelected ? '<div class="mt-3 mx-2"><div class="h-px bg-zinc-700"></div></div>' : '<div class="mt-3"></div>'}
-                  </div>
-                `;
-              }).join('')}
+              ${renderNotesBySection('pinned', 'Pinned', 'pin', true)}
+              ${renderNotesBySection('previous-7-days', 'Previous 7 Days', 'calendar')}
+              ${renderNotesBySection('previous-30-days', 'Previous 30 Days', 'calendar')}
             </div>
 
             <div class="p-3 border-t border-zinc-700">
