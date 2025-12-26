@@ -277,14 +277,16 @@ I'm [Derek](https://www.linkedin.com/in/derek-bivona-0a9b32a8/). I'm a researche
           <!-- Sidebar -->
           <div class="${isMobile ? (isSidebarOpen ? 'w-full' : 'hidden') : (isSidebarOpen ? 'w-80' : 'w-0')} transition-all duration-300 border-r border-zinc-700 flex flex-col overflow-hidden" style="background-color: #262626;">
             <div class="p-4 pb-3">
-              <div class="flex items-center gap-2 mb-3">
+              <div class="flex items-center justify-between mb-3">
                 <div class="flex gap-2">
                   <div class="w-3 h-3 rounded-full bg-red-500"></div>
                   <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
                   <div class="w-3 h-3 rounded-full bg-green-500"></div>
                 </div>
+                <button class="text-${config.sidebarColor}-400 hover:text-${config.sidebarColor}-300 transition-colors">
+                  <i data-lucide="square-pen" class="w-4 h-4"></i>
+                </button>
               </div>
-              <h1 class="text-xl font-semibold text-${config.sidebarColor}-400">${config.sidebarTitle}</h1>
             </div>
             
             <div class="px-3 pb-3">
@@ -347,7 +349,7 @@ I'm [Derek](https://www.linkedin.com/in/derek-bivona-0a9b32a8/). I'm a researche
             `}
 
             <!-- Content Area -->
-            <div class="flex-1 overflow-y-auto px-8 py-6">
+            <div class="flex-1 overflow-y-auto px-8 py-0">
               ${!isMobile ? `
               <!-- Desktop header and title -->
               <div class="mb-6">
