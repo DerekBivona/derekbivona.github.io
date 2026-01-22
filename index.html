@@ -315,20 +315,20 @@ I'm [Derek](https://www.linkedin.com/in/derek-bivona-0a9b32a8/). I'm a researche
           <!-- Main Content -->
           <div class="${isMobile ? (isSidebarOpen ? 'hidden' : 'w-full') : 'flex-1'} flex flex-col overflow-hidden textured-bg">
             ${isMobile ? `
-            <!-- Mobile back button -->
-            <div class="h-14 flex items-center px-4">
+            <!-- Mobile back button and header -->
+            <div class="h-14 flex items-center px-4 relative">
               <button 
                 onclick="toggleSidebar()"
-                class="flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-colors font-medium text-lg"
+                class="flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-colors font-medium text-lg relative z-10"
               >
                 <span class="text-2xl">‹</span>
                 <span>Notes</span>
               </button>
+              <p class="text-sm text-zinc-500 font-medium absolute left-1/2 transform -translate-x-1/2">${config.headerText}</p>
             </div>
             
             <!-- Mobile note title -->
             <div class="px-6 pt-2 pb-4">
-              <p class="text-sm text-zinc-500 font-medium mb-4 text-center">${config.headerText}</p>
               <div class="flex items-center gap-3">
                 <span class="text-4xl">${currentNote.emoji}</span>
                 <h2 class="text-2xl font-semibold">${currentNote.title}</h2>
